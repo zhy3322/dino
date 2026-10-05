@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f6efd9">
+  <title>Pixel Dash - 像素衝刺</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">◆</span><span>PIXEL DASH</span></div>
+      <div class="stats" aria-label="遊戲資訊">
+        <span>分數 <strong id="score">00000</strong></span>
+        <span>最高 <strong id="high-score">00000</strong></span>
+        <span>速度 <strong id="speed">1.0x</strong></span>
+        <span>碎片 <strong id="fragment-count">0/5</strong></span>
+        <span id="shield-status" class="shield-status">護盾待機</span>
+        <span id="tool-status" class="tool-status">工具待機</span>
+      </div>
+    </header>
+
+    <section class="game-frame" aria-label="像素衝刺遊戲區域">
+      <canvas id="game-canvas" width="960" height="420" aria-label="像素跑酷遊戲畫布"></canvas>
+
+      <div id="start-panel" class="overlay active">
+        <p class="eyebrow">ORIGINAL PIXEL RUNNER</p>
+        <h1>像素衝刺</h1>
+        <p>避開晶刺，跑得越遠分數越高</p>
+        <button id="start-button" class="primary-button" type="button">開始遊戲</button>
+        <small>Space / Enter 跳躍・觸控畫面跳躍</small>
+      </div>
+
+      <div id="game-over-panel" class="overlay">
+        <p class="eyebrow danger">RUN ENDED</p>
+        <h2>撞上晶刺了！</h2>
+        <p>本次分數 <strong id="final-score">00000</strong></p>
+        <p class="new-record" id="new-record">NEW RECORD</p>
+        <button id="restart-button" class="primary-button" type="button">重新開始</button>
+        <small>Space / Enter / 點擊按鈕</small>
+      </div>
+
+      <div id="pause-badge" class="pause-badge">PAUSED</div>
+      <button id="pause-button" class="icon-button" type="button" aria-label="暫停遊戲" title="暫停 / 繼續">Ⅱ</button>
+    </section>
+
+    <footer class="hint"><span class="key">SPACE</span> 跳躍 / 飛行升高 <span class="dot">•</span> <span class="key">P</span> 暫停 <span class="dot">•</span> 左鍵發射清除槍</footer>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
