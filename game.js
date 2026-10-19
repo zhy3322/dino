@@ -25,6 +25,11 @@
   const random = (minimum, maximum) => Math.random() * (maximum - minimum) + minimum;
   const integer = (minimum, maximum) => Math.floor(random(minimum, maximum + 1));
   const padScore = value => String(Math.floor(value)).padStart(5, '0');
+  const playerFrames = Array.from({ length: 8 }, (_, index) => {
+    const frame = new Image();
+    frame.src = `sprites/character-${String(index).padStart(2, '0')}.png`;
+    return frame;
+  });
 
   let state = 'ready';
   let player;
@@ -54,10 +59,11 @@
 
   class Player {
     constructor() {
-      this.x = 130;
+      this.x = 122;
       this.y = GROUND_Y - 58;
-      this.width = 42;
+      this.width = 58;
       this.height = 58;
+      this.animationTime = 0;
       this.velocityY = 0;
       this.gravity = 0.92;
       this.jumpForce = -16.5;
@@ -82,6 +88,7 @@
     }
 
     update(delta) {
+      this.animationTime += delta;
       if (this.dead) {
         this.x += this.deathVelocityX * delta;
         this.velocityY += this.gravity * 1.05 * delta;
@@ -138,17 +145,11 @@
         context.fillRect(18, 29, 12, 4);
         drawShield(this.width / 2, this.height / 2);
       } else {
-        context.fillStyle = '#25262b';
-        context.fillRect(7, 12, 30, 39);
-        context.fillRect(14, 5, 23, 12);
-        context.fillRect(37, 17, 9, 11);
-        context.fillRect(3, 49, 13, 9);
-        context.fillRect(28, 49, 13, 9);
-        context.fillStyle = '#f0b94a';
-        context.fillRect(27, 9, 5, 5);
-        context.fillRect(14, 23, 7, 7);
-        context.fillStyle = '#d94b45';
-        context.fillRect(23, 36, 9, 4);
+        const frame = playerFrames[Math.floor(this.animationTime / 8) % playerFrames.length];
+        if (frame.complete && frame.naturalWidth > 0) {
+          context.imageSmoothingEnabled = false;
+          context.drawImage(frame, 0, 0, this.width, this.height);
+        }
       }
       context.restore();
       if (this.isShielded && !this.isFlying) {
