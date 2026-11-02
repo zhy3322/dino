@@ -32,6 +32,9 @@
   });
   const coinSound = new Audio('sound/coin01.mp3');
   const jumpSound = new Audio('sound/jump01.mp3');
+  const backgroundMusic = new Audio('sound/8-Bit Jumping Fun.mp3');
+  backgroundMusic.loop = true;
+  backgroundMusic.volume = 0.35;
 
   let state = 'ready';
   let player;
@@ -361,16 +364,19 @@
     pauseButton.textContent = 'Ⅱ';
     updateFragmentHud();
     ensureAudio();
+    playBackgroundMusic();
   }
 
   function togglePause() {
     if (state === 'running') {
       state = 'paused';
+      backgroundMusic.pause();
       pauseBadge.classList.add('active');
       pauseButton.textContent = '▶';
       pauseButton.setAttribute('aria-label', '繼續遊戲');
     } else if (state === 'paused') {
       state = 'running';
+      playBackgroundMusic();
       pauseBadge.classList.remove('active');
       pauseButton.textContent = 'Ⅱ';
       pauseButton.setAttribute('aria-label', '暫停遊戲');
@@ -635,6 +641,7 @@
 
   function finishGame() {
     state = 'gameover';
+    backgroundMusic.pause();
     const roundedScore = Math.floor(score);
     const isNewRecord = roundedScore > highScore;
     if (isNewRecord) {
@@ -777,6 +784,10 @@
   function playSound(sound) {
     sound.currentTime = 0;
     sound.play().catch(() => {});
+  }
+
+  function playBackgroundMusic() {
+    backgroundMusic.play().catch(() => {});
   }
 
   function playTone(frequency, duration, type, volume, delay = 0) {
