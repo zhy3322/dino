@@ -30,6 +30,8 @@
     frame.src = `sprites/character-${String(index).padStart(2, '0')}.png`;
     return frame;
   });
+  const coinSound = new Audio('sound/coin01.mp3');
+  const jumpSound = new Audio('sound/jump01.mp3');
 
   let state = 'ready';
   let player;
@@ -84,6 +86,7 @@
       if (state !== 'running' || this.isJumping) return;
       this.velocityY = this.jumpForce;
       this.isJumping = true;
+      playSound(jumpSound);
       playTone(420, 0.08, 'square', 0.045);
     }
 
@@ -469,6 +472,7 @@
   function collectFragment(fragmentIndex) {
     planeFragments.splice(fragmentIndex, 1);
     fragmentsCollected += 1;
+    playSound(coinSound);
     playTone(520, 0.07, 'square', 0.04);
     for (let index = 0; index < 7; index += 1) {
       particles.push(new Particle(player.x + player.width / 2, player.y + player.height / 2, {
@@ -572,6 +576,7 @@
       for (let index = boostPotions.length - 1; index >= 0; index -= 1) {
         if (isColliding(player, boostPotions[index])) {
           boostPotions.splice(index, 1);
+          playSound(coinSound);
           activateBoostPotion();
           break;
         }
@@ -593,6 +598,7 @@
         if (isColliding(player, laserPickups[index])) {
           laserPickups.splice(index, 1);
           player.laserTimer = 10;
+          playSound(coinSound);
           playTone(520, 0.1, 'square', 0.045);
           createExplosion(player.x + player.width / 2, player.y + player.height / 2, '#6ed1d7');
           break;
@@ -766,6 +772,11 @@
   function ensureAudio() {
     if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
     if (audioContext.state === 'suspended') audioContext.resume();
+  }
+
+  function playSound(sound) {
+    sound.currentTime = 0;
+    sound.play().catch(() => {});
   }
 
   function playTone(frequency, duration, type, volume, delay = 0) {
